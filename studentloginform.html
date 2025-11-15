@@ -1,0 +1,120 @@
+
+
+
+<!DOCTYPE html "//W3C//DTD XHTMIL 10 Transitional//EN">
+<html lang="en">
+<head>
+  <meta charset="UTF-8" >
+  <meta name="description" content="HTML Tutorial for block and Inline element"  >  <!--Search engine test-->
+  <meta name="Keywords" content="html,block,div,span,h1,h2">     <!--Search Key words-->
+  <meta name="autor" content="Aung Kaung Khant">
+  <meta http--equiv="refresh" content="5" url="http://ww.google.com">            <!--linkage to other website-->
+  <title>Student Login</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #664575;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      margin-top: 50px;
+      background: #fefefecc;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(24, 24, 24, 0.2);
+    }
+    label { display: block; margin-top: 10px; }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 2px solid #65724dad;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 14px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .login-btn { background: #16a34a; color: #fff; }
+    .clear-btn { background: #f59e0b; color: #fff; }
+    .logout-btn { background: #dc2626; color: #fff; }
+    .message { font-size: 14px; margin-top: 5px; }
+    .student-info { border: 1px solid #ddd; padding: 10px; border-radius: 6px; margin-top: 10px; background: #fff; }
+    .back-btn { background: #0284c7; color: #fff; text-decoration: none; display: inline-block; margin-top: 10px; padding: 10px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Login to View Student Info</h2>
+    <label>Student ID</label>
+    <input type="text" id="loginID" placeholder="Enter ID" />
+
+    <label>Password</label>
+    <input type="password" id="loginPass" placeholder="Enter password" />
+
+    <button class="login-btn" onclick="loginStudent()">Login</button>
+    <button class="clear-btn" onclick="clearLogin()">Clear</button>
+    <p class="message" id="loginMsg"></p>
+
+    <div id="studentInfo" class="student-info" style="display:none;"></div>
+
+    <!-- Link back to register page -->
+    <a href="studebtregisterationform.html" class="back-btn">Back to Registration</a>
+  </div>
+
+  <script>
+    let students = [];
+
+    window.onload = () => {
+      const saved = localStorage.getItem("students");
+      if (saved) {
+        students = JSON.parse(saved);
+      }
+    }
+
+    function loginStudent() {
+      const id = document.getElementById("loginID").value.trim();
+      const pass = document.getElementById("loginPass").value;
+      const msg = document.getElementById("loginMsg");
+      const info = document.getElementById("studentInfo");
+
+      msg.textContent = "";
+      info.style.display = "none";
+      info.innerHTML = "";
+
+      const student = students.find(s => s.id === id && s.password === pass);
+      if (!student) {
+        msg.textContent = "Invalid ID or Password!";
+        return;
+      }
+
+      msg.textContent = "Login successful!";
+      info.style.display = "block";
+      info.innerHTML = `
+        <strong>Name:</strong> ${student.name}<br>
+        <strong>ID:</strong> ${student.id}<br>
+        <strong>Major:</strong> ${student.major}<br>
+        <strong>GPA:</strong> ${student.gpa}<br>
+        <button class="logout-btn" onclick="logoutStudent()">Logout</button>
+      `;
+    }
+
+    function logoutStudent() {
+      document.getElementById("studentInfo").style.display = "none";
+      document.getElementById("studentInfo").innerHTML = "";
+      document.getElementById("loginMsg").textContent = "";
+    }
+
+    function clearLogin() {
+      document.getElementById("loginID").value = "";
+      document.getElementById("loginPass").value = "";
+      document.getElementById("loginMsg").textContent = "";
+      document.getElementById("studentInfo").style.display = "none";
+    }
+  </script>
+</body>
+</html>

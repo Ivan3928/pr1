@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="Student Registration Page">
+  <meta name="keywords" content="html, registration, student">
+  <meta name="author" content="Aung Kaung Khant">
+  <title>Student Registration</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #5c4575;
+      margin: 10;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: #fffefe9f;
+      padding: 25px;
+      border-radius: 14px;
+      box-shadow: 0 4px 10px rgba(183, 24, 24, 0.1);
+    }
+    label { display: block; margin-top: 10px; }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+      border: 2px solid #65724dad;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 14px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .register-btn { background: #0284c7; color: #fff; }
+    .reset-btn { background: #f59e0b; color: #fff; }
+    .link-btn { background: #1eb910b1; color: #fffffff2; text-decoration: navajowhite; display: inline-table; }
+    .message { font-size: 14px; margin-top: 5px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Register Student</h2>
+    <label>Student Name</label>
+    <input type="text" id="regName" placeholder="Enter name" />
+
+    <label>Student ID</label>
+    <input type="text" id="regID" placeholder="Enter ID" />
+
+    <label>Major</label>
+    <input type="text" id="regMajor" placeholder="Enter Major" />
+
+    <label>GPA</label>
+    <input type="text" id="regGpa" placeholder="Enter GPA" />
+
+    <label>Password</label>
+    <input type="password" id="regPass" placeholder="Enter password" />
+
+    <label>Confirm Password</label>
+    <input type="password" id="regConfirm" placeholder="Confirm password" />
+
+    <button class="register-btn" onclick="registerStudent()">Register</button>
+    <button class="reset-btn" onclick="clearForm()">Clear</button>
+    <p class="message" id="regMsg"></p>
+    <p>Registered Students: <span id="studentCount">0</span></p>
+
+    <!-- Link to login page -->
+    <a href="studentloginform.html" class="link-btn">View Registered Students</a>
+  </div>
+
+  <script>
+    let students = [];
+
+    function registerStudent() {
+      const name = document.getElementById("regName").value.trim();
+      const id = document.getElementById("regID").value.trim();
+      const major = document.getElementById("regMajor").value.trim();
+      const gpa = document.getElementById("regGpa").value.trim();
+      const pass = document.getElementById("regPass").value;
+      const confirm = document.getElementById("regConfirm").value;
+      const msg = document.getElementById("regMsg");
+
+      msg.textContent = "";
+
+      if (!name || !id || !major) {
+        msg.textContent = "All fields are required.";
+        return;
+      }
+
+      if (students.some(s => s.id === id)) {
+        msg.textContent = "Student with this ID already exists.";
+        return;
+      }
+
+      if (pass !== confirm) {
+        msg.textContent = "Passwords do not match.";
+        return;
+      }
+
+      students.push({ name, id, major, gpa, password: pass });
+      localStorage.setItem("students", JSON.stringify(students));
+
+      msg.textContent = "Registered successfully!";
+      document.getElementById("studentCount").textContent = students.length;
+
+      clearForm();
+    }
+
+    function clearForm() {
+      document.getElementById("regName").value = "";
+      document.getElementById("regID").value = "";
+      document.getElementById("regMajor").value = "";
+      document.getElementById("regGpa").value = "";
+      document.getElementById("regPass").value = "";
+      document.getElementById("regConfirm").value = "";
+    }
+
+    // Load existing students from localStorage
+    window.onload = () => {
+      const saved = localStorage.getItem("students");
+      if (saved) {
+        students = JSON.parse(saved);
+        document.getElementById("studentCount").textContent = students.length;
+      }
+    }
+  </script>
+</body>
+</html>
+
+
